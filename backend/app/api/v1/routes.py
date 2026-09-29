@@ -1,4 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+
+from app.core.auth.dependencies import get_current_user
+from app.models.user import User
+from app.schemas.user import UserResponse
+
 
 router = APIRouter()
 
@@ -6,3 +11,7 @@ router = APIRouter()
 @router.get("/test")
 def test():
     return {"message": "LifeGraph API is working"}
+
+@router.get("/me", response_model=UserResponse)
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
