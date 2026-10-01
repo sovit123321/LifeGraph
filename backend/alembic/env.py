@@ -22,6 +22,12 @@ from app.db.database import Base
 from app.models.user import User
 from app.models.note import Note
 from app.models.task import Task
+from app.models.goal import Goal
+from app.models.project import Project
+from app.models.event import Event
+from app.models.tag import Tag
+from app.models.note_tag import NoteTag
+from app.models.document import Document
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

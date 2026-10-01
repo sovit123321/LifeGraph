@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.core.auth.dependencies import get_current_user
@@ -40,16 +40,19 @@ def create_task(
     )
 
 
-@router.get("", response_model=list[TaskResponse])
+@router.get("")
 def get_tasks(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(10, ge=1, le=100),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     return get_tasks_service(
         db=db,
         user_id=current_user.id,
+        page=page,
+        page_size=page_size,
     )
-
 
 @router.get("/{task_id}", response_model=TaskResponse)
 def get_task(

@@ -37,10 +37,14 @@ def create_task_service(
 def get_tasks_service(
     db: Session,
     user_id: UUID,
+    page: int,
+    page_size: int,
 ):
     return get_tasks(
         db=db,
         user_id=user_id,
+        page=page,
+        page_size=page_size,
     )
 
 

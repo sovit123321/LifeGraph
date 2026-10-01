@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.task import Task
@@ -33,11 +33,21 @@ def create_task(
 
     return task
 
-
 def get_tasks(
     db: Session,
     user_id: UUID,
-) -> list[Task]:
+    page: int,
+    page_size: int,
+):
+    offset = (page - 1) * page_size
+
+    total = db.scalar(
+        select(func.count(Task.id)).where(
+            Task.user_id == user_id,
+            Task.deleted_at.is_(None),
+        )
+    )
+
     statement = (
         select(Task)
         .where(
@@ -45,9 +55,18 @@ def get_tasks(
             Task.deleted_at.is_(None),
         )
         .order_by(Task.created_at.desc())
+        .offset(offset)
+        .limit(page_size)
     )
 
-    return list(db.scalars(statement).all())
+    items = list(db.scalars(statement).all())
+
+    return {
+        "items": items,
+        "total": total or 0,
+        "page": page,
+        "page_size": page_size,
+    }
 
 
 def get_task(
