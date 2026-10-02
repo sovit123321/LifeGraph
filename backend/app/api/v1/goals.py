@@ -85,21 +85,26 @@ def get_goal(
     "/{goal_id}",
     response_model=GoalResponse,
 )
+@router.patch(
+    "/{goal_id}",
+    response_model=GoalResponse,
+)
 def update_goal(
     goal_id: UUID,
     goal_data: GoalUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    update_data = {
+        field: getattr(goal_data, field)
+        for field in goal_data.model_fields_set
+    }
+
     goal = update_goal_service(
         db=db,
         user_id=current_user.id,
         goal_id=goal_id,
-        title=goal_data.title,
-        description=goal_data.description,
-        status=goal_data.status,
-        priority=goal_data.priority,
-        target_date=goal_data.target_date,
+        update_data=update_data,
     )
 
     if not goal:

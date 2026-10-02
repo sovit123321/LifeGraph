@@ -81,31 +81,15 @@ def update_goal(
     db: Session,
     user_id: UUID,
     goal_id: UUID,
-    title: str | None,
-    description: str | None,
-    status: str | None,
-    priority: str | None,
-    target_date: datetime | None,
+    update_data: dict,
 ):
     goal = get_goal(db, user_id, goal_id)
 
     if not goal:
         return None
 
-    if title is not None:
-        goal.title = title
-
-    if description is not None:
-        goal.description = description
-
-    if status is not None:
-        goal.status = status
-
-    if priority is not None:
-        goal.priority = priority
-
-    if target_date is not None:
-        goal.target_date = target_date
+    for field, value in update_data.items():
+        setattr(goal, field, value)
 
     db.commit()
     db.refresh(goal)
