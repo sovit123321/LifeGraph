@@ -82,16 +82,16 @@ def update_task(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    update_data = {
+        field: getattr(task_data, field)
+        for field in task_data.model_fields_set
+    }
+
     task = update_task_service(
         db=db,
         user_id=current_user.id,
         task_id=task_id,
-        title=task_data.title,
-        description=task_data.description,
-        project_id=task_data.project_id,
-        goal_id=task_data.goal_id,
-        status=task_data.status,
-        due_date=task_data.due_date,
+        update_data=update_data,
     )
 
     if not task:

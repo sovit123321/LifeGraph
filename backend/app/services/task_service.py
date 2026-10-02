@@ -64,25 +64,14 @@ def update_task_service(
     db: Session,
     user_id: UUID,
     task_id: UUID,
-    title: str | None,
-    description: str | None,
-    project_id: UUID | None,
-    goal_id: UUID | None,
-    status: str | None,
-    due_date: datetime | None,
+    update_data: dict,
 ):
     return update_task(
         db=db,
         user_id=user_id,
         task_id=task_id,
-        title=title,
-        description=description,
-        project_id=project_id,
-        goal_id=goal_id,
-        status=status,
-        due_date=due_date,
+        update_data=update_data,
     )
-
 
 def delete_task_service(
     db: Session,

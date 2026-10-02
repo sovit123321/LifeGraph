@@ -90,12 +90,7 @@ def update_task(
     db: Session,
     user_id: UUID,
     task_id: UUID,
-    title: str | None,
-    description: str | None,
-    project_id: UUID | None,
-    goal_id: UUID | None,
-    status: str | None,
-    due_date: datetime | None,
+    update_data: dict,
 ) -> Task | None:
     task = get_task(
         db=db,
@@ -106,23 +101,8 @@ def update_task(
     if not task:
         return None
 
-    if title is not None:
-        task.title = title
-
-    if description is not None:
-        task.description = description
-
-    if project_id is not None:
-        task.project_id = project_id
-
-    if goal_id is not None:
-        task.goal_id = goal_id
-
-    if status is not None:
-        task.status = status
-
-    if due_date is not None:
-        task.due_date = due_date
+    for field, value in update_data.items():
+        setattr(task, field, value)
 
     db.commit()
     db.refresh(task)
