@@ -9,9 +9,6 @@ from app.schemas.user import UserResponse
 router = APIRouter()
 
 
-@router.get("/test")
-def test():
-    return {"message": "LifeGraph API is working"}
 
 @router.get("/me", response_model=UserResponse)
 @limiter.limit("30/minute")
