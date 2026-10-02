@@ -83,27 +83,15 @@ def update_project(
     db: Session,
     user_id: UUID,
     project_id: UUID,
-    title: str | None,
-    description: str | None,
-    status: str | None,
-    github_url: str | None,
+    update_data: dict,
 ):
     project = get_project(db, user_id, project_id)
 
     if not project:
         return None
 
-    if title is not None:
-        project.title = title
-
-    if description is not None:
-        project.description = description
-
-    if status is not None:
-        project.status = status
-
-    if github_url is not None:
-        project.github_url = github_url
+    for field, value in update_data.items():
+        setattr(project, field, value)
 
     db.commit()
     db.refresh(project)

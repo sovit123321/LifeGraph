@@ -91,15 +91,16 @@ def update_event(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    update_data = {
+        field: getattr(event_data, field)
+        for field in event_data.model_fields_set
+    }
+
     event = update_event_service(
         db=db,
         user_id=current_user.id,
         event_id=event_id,
-        title=event_data.title,
-        start_at=event_data.start_at,
-        end_at=event_data.end_at,
-        all_day=event_data.all_day,
-        task_id=event_data.task_id,
+        update_data=update_data,
     )
 
     if not event:

@@ -90,14 +90,16 @@ def update_project(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    update_data = {
+        field: getattr(project_data, field)
+        for field in project_data.model_fields_set
+    }
+
     project = update_project_service(
         db=db,
         user_id=current_user.id,
         project_id=project_id,
-        title=project_data.title,
-        description=project_data.description,
-        status=project_data.status,
-        github_url=project_data.github_url,
+        update_data=update_data,
     )
 
     if not project:
@@ -107,7 +109,6 @@ def update_project(
         )
 
     return project
-
 
 @router.delete(
     "/{project_id}",

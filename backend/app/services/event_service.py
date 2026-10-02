@@ -58,23 +58,14 @@ def update_event_service(
     db: Session,
     user_id: UUID,
     event_id: UUID,
-    title: str | None,
-    start_at: datetime | None,
-    end_at: datetime | None,
-    all_day: bool | None,
-    task_id: UUID | None,
+    update_data: dict,
 ):
     return update_event(
-        db,
-        user_id,
-        event_id,
-        title,
-        start_at,
-        end_at,
-        all_day,
-        task_id,
+        db=db,
+        user_id=user_id,
+        event_id=event_id,
+        update_data=update_data,
     )
-
 
 def delete_event_service(
     db: Session,

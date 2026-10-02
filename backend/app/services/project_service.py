@@ -48,26 +48,24 @@ def get_project_service(
     user_id: UUID,
     project_id: UUID,
 ):
-    return get_project(db, user_id, project_id)
+    return get_project(
+        db,
+        user_id,
+        project_id,
+    )
 
 
 def update_project_service(
     db: Session,
     user_id: UUID,
     project_id: UUID,
-    title: str | None,
-    description: str | None,
-    status: str | None,
-    github_url: str | None,
+    update_data: dict,
 ):
     return update_project(
-        db,
-        user_id,
-        project_id,
-        title,
-        description,
-        status,
-        github_url,
+        db=db,
+        user_id=user_id,
+        project_id=project_id,
+        update_data=update_data,
     )
 
 
@@ -76,4 +74,8 @@ def delete_project_service(
     user_id: UUID,
     project_id: UUID,
 ):
-    return delete_project(db, user_id, project_id)
+    return delete_project(
+        db,
+        user_id,
+        project_id,
+    )

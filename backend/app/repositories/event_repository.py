@@ -86,31 +86,15 @@ def update_event(
     db: Session,
     user_id: UUID,
     event_id: UUID,
-    title: str | None,
-    start_at: datetime | None,
-    end_at: datetime | None,
-    all_day: bool | None,
-    task_id: UUID | None,
+    update_data: dict,
 ):
     event = get_event(db, user_id, event_id)
 
     if not event:
         return None
 
-    if title is not None:
-        event.title = title
-
-    if start_at is not None:
-        event.start_at = start_at
-
-    if end_at is not None:
-        event.end_at = end_at
-
-    if all_day is not None:
-        event.all_day = all_day
-
-    if task_id is not None:
-        event.task_id = task_id
+    for field, value in update_data.items():
+        setattr(event, field, value)
 
     db.commit()
     db.refresh(event)
